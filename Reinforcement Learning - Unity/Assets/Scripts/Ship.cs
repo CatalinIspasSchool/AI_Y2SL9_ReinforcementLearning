@@ -380,11 +380,13 @@ public class Ship : MonoBehaviour
             if (_asteroidX <= transform.position.x)
             {
                 IncStepReward(1);
+                Debug.Log("Gaining 1 for MOVING LEFT: " + stepReward);
             }
             else
             {
                 IncStepReward(-1);
-            }
+				Debug.Log("Losing 1 for MOVING LEFT: " + stepReward);
+			}
         }
         else if (_action == GameAction.Action.Right)
         {
@@ -392,10 +394,12 @@ public class Ship : MonoBehaviour
 			if (_asteroidX >= transform.position.x)
 			{
 				IncStepReward(1);
+				Debug.Log("Gaining 1 for MOVING RIGHT: " + stepReward);
 			}
 			else
 			{
 				IncStepReward(-1);
+				Debug.Log("Losing 1 for MOVING RIGHT: " + stepReward);
 			}
 		}
         else
@@ -481,7 +485,7 @@ public class Ship : MonoBehaviour
 		}
         else
         {
-            float maxReward = -9999;
+            float maxReward = 0;
             for (int i = 0; i < possibleActions.Count; i++) 
             {
                 if (maxReward < learningMatrix[currentState.gameStateID][i])
@@ -491,7 +495,7 @@ public class Ship : MonoBehaviour
                     selectedActionIndex = i;
 				}
 			}
-            if (maxReward == -9999)
+            if (maxReward == 0)
             {
 				int randomIndex = UnityEngine.Random.Range(0, possibleActions.Count);
 				selectedAction = possibleActions[randomIndex];
@@ -517,17 +521,20 @@ public class Ship : MonoBehaviour
     {
 
         if (ammoLimit && ammoCount <= 0)
-            isFiring = false;
-        else
+        {
+			isFiring = false;
+		}
+		else
         {
 
             if (_fire == GameAction.Action.Fire)
             {
                 isFiring = true;
                 ammoCount--;
-        
-            }
-            else
+                IncStepReward(-0.5f);
+				Debug.Log("Losing 0.5 for FIRING: " + stepReward);
+			}
+			else
             {
                 isFiring = false;
             }
@@ -545,27 +552,29 @@ public class Ship : MonoBehaviour
     public void AsteroidColliion()
     {
         collisions++;
+        IncStepReward(-10);
+		Debug.Log("Losing 10 for GETTING HIT: " + stepReward);
+	}
 
-    }
 
-
-    /**
+	/**
      * TargetHit will be called when the ship destroyed an astroid with the laser
      */
-    public void TargetHit()
+	public void TargetHit()
     {
         asteroidDestroyed++;
+        IncStepReward(5);
+		Debug.Log("Gaining 5 for HITTING: " + stepReward);
+	}
 
-    }
 
 
 
-
-    /**
+	/**
      * 
      * LogLearningMatrix will save to file the latest learning matrix for this ship
      */
-    public void LogLearningMatrix()
+	public void LogLearningMatrix()
     {
 
         string fileName = "LearningMatrix_" + shipIndexID + ".csv";
