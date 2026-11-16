@@ -1,0 +1,10 @@
+State, None, Left, Right, Fire
+Left   _Near   ,0,1,-1,0,
+Left   _Medium,0,0,-1,0,
+Left   _Far    ,0,1,-1,0,
+Centre_Near   ,0,-1,-1,0,
+Centre_Medium,0,-1,-1,0,
+Centre_Far    ,0,-1,-1,0,
+Right _Near   ,0,-1,1,0,
+Right _Medium,0,0,0,0,
+Right _Far    ,0,-1,1,0,
