@@ -291,7 +291,8 @@ public class Ship : MonoBehaviour
 
         ApplyMovement(selectedAction.action, _asteroidX);
         SetFire(selectedAction.action);
-
+        if (selectedAction.action == GameAction.Action.None)
+            Debug.Log("Gained 0 for NOTHING: " + stepReward);
     }
 
 
@@ -324,6 +325,7 @@ public class Ship : MonoBehaviour
         totalReward += stepReward;
 
         stepReward = 0;
+        Debug.Log("Reset stepReward: " + stepReward);
     }
 
 
